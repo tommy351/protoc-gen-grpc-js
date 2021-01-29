@@ -63,7 +63,7 @@ export function getJSMessageFileName(input: string): string {
 }
 
 export function getJSServiceFileName(input: string): string {
-  return stripProto(input) + "_grpc.pb.js";
+  return stripProto(input) + "_grpc_pb.js";
 }
 
 export function getMessageFullName(
