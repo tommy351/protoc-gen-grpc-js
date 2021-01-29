@@ -98,10 +98,8 @@ function printServices(file: InputFile): string {
 }
 
 function generateFile(ctx: Context, file: InputFile): string {
-  const services = file.services;
-
-  if (!services.length) {
-    return "// GENERATED CODE -- NO SERVICES IN PROTO";
+  if (!file.services.length) {
+    return "";
   }
 
   return `
