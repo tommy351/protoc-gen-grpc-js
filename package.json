@@ -36,7 +36,8 @@
     "node": ">=10"
   },
   "dependencies": {
-    "get-stdin": "^8.0.0"
+    "get-stdin": "^8.0.0",
+    "tslib": "^1.14.1"
   },
   "devDependencies": {
     "@grpc/grpc-js": "^1.2.5",
