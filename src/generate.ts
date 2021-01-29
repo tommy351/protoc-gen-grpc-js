@@ -4,7 +4,12 @@ import {
   CodeGeneratorResponse,
 } from "google-protobuf/google/protobuf/compiler/plugin_pb";
 import { Context, InputFile, Message, Method, Service } from "./types";
-import { getModuleAlias, getRelativePath, lowerCaseFirstLetter } from "./utils";
+import {
+  getModuleAlias,
+  getRelativePath,
+  indent,
+  lowerCaseFirstLetter,
+} from "./utils";
 
 function printFileComments(file: InputFile): string {
   // TODO
@@ -28,7 +33,7 @@ function printImports(ctx: Context, file: InputFile): string {
     const alias = getModuleAlias(key);
     const path = getRelativePath(file.name, value);
 
-    output.push(`const ${alias} = require(${JSON.stringify(path)})`);
+    output.push(`const ${alias} = require(${JSON.stringify(path)});`);
   }
 
   return output.join("\n");
@@ -82,10 +87,10 @@ function printService(service: Service): string {
 
   for (const method of service.methods) {
     const name = lowerCaseFirstLetter(method.name);
-    output.push(`${JSON.stringify(name)}: ${printMethod(method)},`);
+    output.push(`  ${name}: ${indent(printMethod(method), "  ").trim()},`);
   }
 
-  output.push("}");
+  output.push("};\n");
   output.push(
     `exports.${service.name}Client = grpc.makeGenericClientConstructor(${service.name}Service);`
   );
@@ -105,6 +110,7 @@ function generateFile(ctx: Context, file: InputFile): string {
   return `
 // GENERATED CODE -- DO NOT EDIT!
 ${printFileComments(file)}
+/* eslint-disable */
 "use strict";
 
 ${printImports(ctx, file)}

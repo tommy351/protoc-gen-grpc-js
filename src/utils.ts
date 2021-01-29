@@ -86,3 +86,10 @@ export function upperCaseFirstLetter(input: string): string {
   if (!input) return "";
   return input[0].toUpperCase() + input.substring(1);
 }
+
+export function indent(input: string, space: string): string {
+  return input
+    .split("\n")
+    .map((line) => `${space}${line}`)
+    .join("\n");
+}
