@@ -1,4 +1,4 @@
-import generate from "./generate";
+import { generate } from "./generate";
 import logger from "./logger";
 
 generate().catch((err) => {

@@ -121,7 +121,7 @@ ${printServices(file)}
 `.trim();
 }
 
-export default async function generate(): Promise<void> {
+export async function generate(): Promise<void> {
   const input = await getStdin.buffer();
   const request = CodeGeneratorRequest.deserializeBinary(input);
   const ctx = new Context(request);
