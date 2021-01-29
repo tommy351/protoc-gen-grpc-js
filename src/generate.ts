@@ -67,7 +67,7 @@ function printTransformers(file: InputFile): string {
 function printMethod(method: Method): string {
   return `
 {
-  path: ${JSON.stringify(`/${method.service.name}/${method.name}`)},
+  path: ${JSON.stringify(`/${method.service.fullName}/${method.name}`)},
   requestStream: ${method.clientStreaming},
   responseStream: ${method.serverStreaming},
   requestType: ${method.inputType?.nodeObjectPath},
