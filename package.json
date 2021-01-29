@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-grpc-js",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generate client and service objects for use with Node.js gRPC libraries.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,6 +25,11 @@
     "url": "https://github.com/tommy351/protoc-gen-grpc-js/issues"
   },
   "homepage": "https://github.com/tommy351/protoc-gen-grpc-js#readme",
+  "keywords": [
+    "grpc",
+    "protobuf",
+    "protoc"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
