@@ -7,8 +7,13 @@
     "protoc-gen-grpc-js": "bin/protoc-gen-grpc-js.js"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "rm -rf dist"
   },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tommy351/protoc-gen-grpc-js.git"
