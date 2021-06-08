@@ -17,8 +17,7 @@ function printFileComments(file: InputFile): string {
 }
 
 function printImports(ctx: Context, file: InputFile): string {
-  const grpcPkg = ctx.params.includes("grpc_js") ? "@grpc/grpc-js" : "grpc";
-  const output = [`const grpc = require(${JSON.stringify(grpcPkg)});`];
+  const output = [];
   const deps: Record<string, string> = {};
 
   if (file.messages.length) {
@@ -27,6 +26,11 @@ function printImports(ctx: Context, file: InputFile): string {
 
   for (const dep of file.dependencies) {
     deps[dep.name] = dep.jsMessageFileName;
+  }
+
+  if (!ctx.params.generatePackageDefinition) {
+    const grpcPkg = ctx.params.grpcJs ? "@grpc/grpc-js" : "grpc";
+    output.push(`const grpc = require(${JSON.stringify(grpcPkg)});`);
   }
 
   for (const [key, value] of Object.entries(deps)) {
@@ -80,10 +84,20 @@ function printMethod(method: Method): string {
 `.trim();
 }
 
-function printService(service: Service): string {
-  const output: string[] = [
-    `const ${service.name}Service = exports.${service.name}Service = {`,
-  ];
+function printService(ctx: Context, service: Service): string {
+  const output: string[] = [];
+
+  if (ctx.params.generatePackageDefinition) {
+    output.push(
+      `const ${service.name}Service = exports[${JSON.stringify(
+        service.fullName
+      )}] = {`
+    );
+  } else {
+    output.push(
+      `const ${service.name}Service = exports.${service.name}Service = {`
+    );
+  }
 
   for (const method of service.methods) {
     const name = lowerCaseFirstLetter(method.name);
@@ -91,15 +105,18 @@ function printService(service: Service): string {
   }
 
   output.push("};\n");
-  output.push(
-    `exports.${service.name}Client = grpc.makeGenericClientConstructor(${service.name}Service);`
-  );
+
+  if (!ctx.params.generatePackageDefinition) {
+    output.push(
+      `exports.${service.name}Client = grpc.makeGenericClientConstructor(${service.name}Service);`
+    );
+  }
 
   return output.join("\n");
 }
 
-function printServices(file: InputFile): string {
-  return file.services.map((svc) => printService(svc)).join("\n\n");
+function printServices(ctx: Context, file: InputFile): string {
+  return file.services.map((svc) => printService(ctx, svc)).join("\n\n");
 }
 
 function generateFile(ctx: Context, file: InputFile): string {
@@ -117,7 +134,7 @@ ${printImports(ctx, file)}
 
 ${printTransformers(file)}
 
-${printServices(file)}
+${printServices(ctx, file)}
 `.trim();
 }
 

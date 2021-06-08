@@ -14,19 +14,31 @@ import {
   trimPrefix,
 } from "./utils";
 
+export interface Parameters {
+  grpcJs: boolean;
+  generatePackageDefinition: boolean;
+}
+
 export class Context {
   public readonly files: readonly InputFile[];
-  public readonly params: readonly string[];
+  public readonly params: Readonly<Parameters>;
   private readonly messageMap = new Map<string, Message>();
 
   constructor(request: CodeGeneratorRequest) {
+    const reqParams = (request.getParameter() || "")
+      .split(",")
+      .map((x) => x.trim());
+
     this.files = request
       .getProtoFileList()
       .map((file) => new InputFile(this, file));
 
-    this.params = (request.getParameter() || "")
-      .split(",")
-      .map((x) => x.trim());
+    this.params = {
+      grpcJs: reqParams.includes("grpc_js"),
+      generatePackageDefinition: reqParams.includes(
+        "generate_package_definition"
+      ),
+    };
 
     for (const file of this.files) {
       for (const msg of file.messages) {
