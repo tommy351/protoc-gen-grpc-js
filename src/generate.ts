@@ -144,6 +144,10 @@ export async function generate(): Promise<void> {
   const ctx = new Context(request);
   const response = new CodeGeneratorResponse();
 
+  response.setSupportedFeatures(
+    CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL
+  );
+
   for (const file of ctx.files) {
     const content = generateFile(ctx, file);
 
