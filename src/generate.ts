@@ -137,6 +137,7 @@ function generateFile(ctx: Context, file: InputFile): string {
 // GENERATED CODE -- DO NOT EDIT!
 ${printFileComments(file)}
 /* eslint-disable */
+// @ts-nocheck
 "use strict";
 
 ${printImports(ctx, file)}
