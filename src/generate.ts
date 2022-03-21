@@ -60,12 +60,17 @@ function deserialize_${message.identifierName}(arg) {
 }
 
 function printTransformers(file: InputFile): string {
-  const msgs = file.services.reduce(
-    (acc, svc) => [...acc, ...svc.messages],
-    [] as Message[]
-  );
+  const msgMap = new Map<string, Message>();
 
-  return msgs.map((msg) => printMessageTransformer(msg)).join("\n\n");
+  for (const svc of file.services) {
+    for (const msg of svc.messages) {
+      msgMap.set(msg.identifierName, msg);
+    }
+  }
+
+  return [...msgMap.values()]
+    .map((msg) => printMessageTransformer(msg))
+    .join("\n\n");
 }
 
 function printMethod(method: Method): string {
