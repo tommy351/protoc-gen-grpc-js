@@ -3,6 +3,7 @@ import {
   CodeGeneratorRequest,
   CodeGeneratorResponse,
 } from "google-protobuf/google/protobuf/compiler/plugin_pb";
+import assert from "assert";
 import { Context, InputFile, Message, Method, Service } from "./types";
 import {
   getModuleAlias,
@@ -74,17 +75,20 @@ function printTransformers(file: InputFile): string {
 }
 
 function printMethod(method: Method): string {
+  assert(method.inputType);
+  assert(method.outputType);
+
   return `
 {
   path: ${JSON.stringify(`/${method.service.fullName}/${method.name}`)},
   requestStream: ${method.clientStreaming},
   responseStream: ${method.serverStreaming},
-  requestType: ${method.inputType?.nodeObjectPath},
-  responseType: ${method.outputType?.nodeObjectPath},
-  requestSerialize: serialize_${method.inputType?.identifierName},
-  requestDeserialize: deserialize_${method.inputType?.identifierName},
-  responseSerialize: serialize_${method.outputType?.identifierName},
-  responseDeserialize: deserialize_${method.outputType?.identifierName}
+  requestType: ${method.inputType.nodeObjectPath},
+  responseType: ${method.outputType.nodeObjectPath},
+  requestSerialize: serialize_${method.inputType.identifierName},
+  requestDeserialize: deserialize_${method.inputType.identifierName},
+  responseSerialize: serialize_${method.outputType.identifierName},
+  responseDeserialize: deserialize_${method.outputType.identifierName}
 }
 `.trim();
 }
