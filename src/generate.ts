@@ -12,11 +12,6 @@ import {
   lowerCaseFirstLetter,
 } from "./utils";
 
-function printFileComments(file: InputFile): string {
-  // TODO
-  return "";
-}
-
 function printImports(ctx: Context, file: InputFile): string {
   const output = [];
   const deps: Record<string, string> = {};
@@ -134,8 +129,8 @@ function generateFile(ctx: Context, file: InputFile): string {
   }
 
   return `
+// source: ${file.name}
 // GENERATED CODE -- DO NOT EDIT!
-${printFileComments(file)}
 /* eslint-disable */
 // @ts-nocheck
 "use strict";
