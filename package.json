@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-grpc-js",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Generate client and service objects for use with Node.js gRPC libraries.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
